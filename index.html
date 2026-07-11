@@ -2,380 +2,265 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Free Fire HTML Simulator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramalan Weton Jawa - Primbon Modern</title>
+    <!-- Google Fonts untuk kesan premium & mistis -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-dark: #0f0f12;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --panel-bg: rgba(25, 25, 30, 0.85);
+            --text-light: #f3f4f6;
+            --text-gray: #a1a1aa;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
+            font-family: 'Poppins', sans-serif;
         }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        #gameCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        /* Crosshair ala FF (Titik Merah saat Kena Musuh) */
-        #crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            border: 2px solid #000;
-            transition: background 0.1s;
-        }
-
-        /* UI Darah Musuh (HP Bar) */
-        #enemy-ui {
-            position: absolute;
-            top: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 300px;
-        }
-
-        #enemy-name {
-            color: #fff;
-            font-size: 14px;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px #000;
-        }
-
-        .hp-bar-bg {
-            width: 100%;
-            height: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #fff;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        #enemy-hp {
-            width: 100%;
-            height: 100%;
-            background: #ff0055;
-            transition: width 0.1s;
-        }
-
-        /* HUD Kontrol Kanan (Tombol Tembak ala FF Mobile) */
-        #controls-right {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(40, 40, 50, 0.5) 0%, transparent 50%);
+            color: var(--text-light);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 15px;
             align-items: center;
+            padding: 2rem 1rem;
         }
 
-        .btn-fire {
-            width: 85px;
-            height: 85px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 3px solid #ff4500;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
-            active-transform: scale(0.9);
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
         }
 
-        .btn-fire::before {
-            content: '🔥';
-            font-size: 2rem;
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--gold-glow);
         }
 
-        /* Efek Pop-up Angka Damage */
-        .damage-pop {
-            position: absolute;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 2rem;
-            pointer-events: none;
-            animation: floatDamage 0.5s ease-out forwards;
-            text-shadow: 2px 2px 0px #000;
+        header p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
         }
 
-        @keyframes floatDamage {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
-            50% { transform: translate(-50%, -50%) scale(1.4) translateY(-30px); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-60px); }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--panel-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
 
-        /* Notifikasi Kill */
-        #kill-notif {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.8rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: #050507;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
             color: #fff;
-            background: rgba(255, 69, 0, 0.8);
-            padding: 10px 30px;
-            border-radius: 5px;
-            font-size: 1.5rem;
-            border: 2px solid #ffcc00;
-            box-shadow: 0 0 20px #ff4500;
-            pointer-events: none;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        #kill-notif.show {
-            transform: translate(-50%, -50%) scale(1);
+        .form-group input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            border: none;
+            color: #0f0f12;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--gold-glow);
+            filter: brightness(1.1);
+        }
+
+        /* Result Area */
+        .result-box {
+            margin-top: 2.5rem;
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+            border-top: 1px dashed rgba(212, 175, 55, 0.3);
+            padding-top: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .weton-badge {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .neptu-info {
+            font-size: 0.95rem;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+        }
+
+        .character-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            text-align: justify;
+            background: rgba(5, 5, 7, 0.4);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--gold);
         }
     </style>
 </head>
 <body>
 
-    <div id="crosshair"></div>
-    
-    <!-- UI Status Musuh -->
-    <div id="enemy-ui">
-        <div id="enemy-name">TARGET BOT (LEVEL 1)</div>
-        <div class="hp-bar-bg">
-            <div id="enemy-hp"></div>
+    <header>
+        <h1>KALA WETON</h1>
+        <p>Ramalan Karakter & Rahasia Lahir Berdasarkan Primbon Jawa</p>
+    </header>
+
+    <div class="container">
+        <!-- Input Nama & Tanggal -->
+        <div class="form-group">
+            <label for="input-name">Nama Lengkap</label>
+            <input type="text" id="input-name" placeholder="Masukkan namamu..." autocomplete="off">
+        </div>
+        
+        <div class="form-group">
+            <label for="input-date">Tanggal Lahir</label>
+            <input type="date" id="input-date">
+        </div>
+
+        <button id="btn-calculate">HITUNG WETON</button>
+
+        <!-- Tampilan Hasil -->
+        <div class="result-box" id="result-box">
+            <div class="weton-badge" id="weton-title">-</div>
+            <div class="neptu-info" id="neptu-title">Neptu: -</div>
+            <p class="character-desc" id="character-desc"></p>
         </div>
     </div>
 
-    <!-- Papan Pengumuman Kill -->
-    <div id="kill-notif">💀 KNOCK OUT!</div>
-
-    <!-- Kontrol Tembak -->
-    <div id="controls-right">
-        <div class="btn-fire" id="btn-fire"></div>
-    </div>
-
-    <canvas id="gameCanvas"></canvas>
-
-    <!-- Memuat Library Grafis 3D (Three.js) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <script>
-        // --- 1. SETUP DOOM / AMBIENCE 3D ---
-        const canvas = document.getElementById('gameCanvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xa0a0a0); // Langit abu-abu cerah
-        scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
+        // Array Data Hari Masehi & Nilai Neptunya
+        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const dayNeptu = { "Minggu": 5, "Senin": 4, "Selasa": 3, "Rabu": 7, "Kamis": 8, "Jumat": 6, "Sabtu": 9 };
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
+        // Array Data Pasaran Jawa & Nilai Neptunya
+        const pasarans = ["Legi", "Pahing", "Pon", "Wage", "Kliwon"];
+        const pasaranNeptu = { "Legi": 5, "Pahing": 9, "Pon": 7, "Wage": 4, "Kliwon": 8 };
 
-        // Pencahayaan
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-        hemiLight.position.set(0, 20, 0);
-        scene.add(hemiLight);
+        // Bank Data Watak Berdasarkan Kombinasi Pasaran
+        const watakDatabase = {
+            "Legi": "memiliki watak *Sumur Sinaba* (bisa menjadi tempat mengadu atau dimintai nasihat karena wawasannya luas). Kamu orangnya religius, suka kebersihan, dan sangat bertanggung jawab, meskipun terkadang suka mencurigai orang lain.",
+            "Pahing": "memiliki watak *Lakuning Geni* (mirip karakter api). Kamu adalah tipe pejuang yang ambisius, cerdas, setia kawan, dan mandiri. Namun, sisi lainnya adalah kamu cenderung mudah cemburu dan kalau sudah marah sulit diredam.",
+            "Pon": "memiliki watak *Lakuning Lintang* (seperti bintang yang meneduhkan). Kamu punya pesona yang disukai banyak orang, tipikal orang yang suka mengalah, rendah hati, dan berjiwa seni tinggi. Kelemahannya adalah kamu kadang sedikit boros.",
+            "Wage": "memiliki watak *Lakuning Bumi* (bersifat protektif dan penyabar). Kamu adalah sosok yang tekun belajar, setia pada janji, pemaaf, dan penurut. Hanya saja, sekali kamu dikecewakan, kamu bisa menjadi sangat keras kepala.",
+            "Kliwon": "memiliki watak *Lakuning Ghaib* (penuh misteri namun membawa keberuntungan). Kamu berjiwa pemimpin, pandai berbicara, sangat teguh pada prinsip, dan murah hati. Kamu juga tipe orang yang setia pada komitmen jangka panjang."
+        };
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(3, 10, 10);
-        scene.add(dirLight);
+        const btnCalculate = document.getElementById('btn-calculate');
+        const resultBox = document.getElementById('result-box');
+        const wetonTitle = document.getElementById('weton-title');
+        const neptuTitle = document.getElementById('neptu-title');
+        const characterDesc = document.getElementById('character-desc');
 
-        // Lantai/Tanah Lapangan Bermain
-        const floorGeo = new THREE.PlaneGeometry(100, 100);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x557a46, roughness: 0.8 }); // Rumput hijau tua
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        scene.add(floor);
+        btnCalculate.addEventListener('click', () => {
+            const name = document.getElementById('input-name').value.trim();
+            const dateVal = document.getElementById('input-date').value;
 
-        // --- 2. MEMBUAT PLAYER & KAMERA (Sudut Pandang TPS) ---
-        const playerGroup = new THREE.Group();
-        scene.add(playerGroup);
-
-        // Karakter Utama Sederhana (Kapsul Kuning)
-        const playerGeo = new THREE.CapsuleGeometry(0.4, 1, 4, 8);
-        const playerMat = new THREE.MeshStandardMaterial({ color: 0xffd700 });
-        const playerMesh = new THREE.Mesh(playerGeo, playerMat);
-        playerMesh.position.y = 0.9;
-        playerGroup.add(playerMesh);
-
-        // Posisikan Kamera di belakang bahu Karakter (Khas Free Fire)
-        camera.position.set(0, 2.5, 3.5);
-        playerGroup.add(camera);
-
-        // --- 3. MEMBUAT MUSUH (BOT TARGET) ---
-        let enemyHP = 200;
-        const maxEnemyHP = 200;
-
-        const enemyGroup = new THREE.Group();
-        enemyGroup.position.set(0, 0, -8); // Berjarak 8 meter di depan player
-        scene.add(enemyGroup);
-
-        // Badan Musuh (Warna Merah Tua)
-        const bodyGeo = new THREE.BoxGeometry(0.8, 1.2, 0.5);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x990000 });
-        const enemyBody = new THREE.Mesh(bodyGeo, bodyMat);
-        enemyBody.position.y = 0.6;
-        enemyBody.name = "body"; // Penanda Bagian Tubuh
-        enemyGroup.add(enemyBody);
-
-        // Kepala Musuh (Warna Putih/Topeng)
-        const headGeo = new THREE.SphereGeometry(0.3, 16, 16);
-        const headMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-        const enemyHead = new THREE.Mesh(headGeo, headMat);
-        enemyHead.position.y = 1.4;
-        enemyHead.name = "head"; // Penanda Bagian Kepala
-        enemyGroup.add(enemyHead);
-
-        // --- 4. LOGIKA ROTASI KAMERA (Geser Layar untuk Membidik) ---
-        let isAiming = false;
-        let previousTouchX, previousTouchY;
-
-        // Kontrol Mouse (untuk PC)
-        window.addEventListener('mousedown', (e) => { if(e.target === canvas) isAiming = true; });
-        window.addEventListener('mouseup', () => { isAiming = false; });
-        window.addEventListener('mousemove', (e) => {
-            if (isAiming) {
-                playerGroup.rotation.y -= e.movementX * 0.003;
+            if (!name || !dateVal) {
+                alert("Nyuwun sewu, mohon isi nama dan tanggal lahir dengan lengkap terlebih dahulu!");
+                return;
             }
-        });
 
-        // Kontrol Sentuh Layar (untuk HP)
-        window.addEventListener('touchstart', (e) => {
-            if(e.target === canvas) {
-                isAiming = true;
-                previousTouchX = e.touches[0].clientX;
-                previousTouchY = e.touches[0].clientY;
-            }
-        });
-        window.addEventListener('touchend', () => { isAiming = false; });
-        window.addEventListener('touchmove', (e) => {
-            if (isAiming) {
-                const touchX = e.touches[0].clientX;
-                const deltaX = touchX - previousTouchX;
-                playerGroup.rotation.y -= deltaX * 0.005;
-                previousTouchX = touchX;
-            }
-        });
-
-        // --- 5. MEKANIK TEMBAKAN & REGISTER DAMAGE ---
-        const raycaster = new THREE.Raycaster();
-        const fireBtn = document.getElementById('btn-fire');
-        const crosshair = document.getElementById('crosshair');
-
-        function shoot() {
-            // Tembak lurus dari tengah layar (titik crosshair)
-            const center = new THREE.Vector2(0, 0); 
-            raycaster.setFromCamera(center, camera);
-
-            // Cek objek apa saja yang tertembus peluru pelacak
-            const intersects = raycaster.intersectObjects(enemyGroup.children);
-
-            if (intersects.length > 0) {
-                const hitObject = intersects[0].object;
-                let damage = 0;
-                let isHeadshot = false;
-
-                if (hitObject.name === "head") {
-                    damage = Math.floor(Math.random() * (45 - 35) + 110); // Damage besar (Headshot)
-                    isHeadshot = true;
-                } else if (hitObject.name === "body") {
-                    damage = Math.floor(Math.random() * (28 - 18) + 18); // Damage standar (Badan)
-                }
-
-                // Kurangi Darah Musuh
-                applyDamage(damage, isHeadshot);
-                
-                // Ubah Indikator Crosshair jadi merah sesaat sebagai feedback hit
-                crosshair.style.background = "red";
-                setTimeout(() => { crosshair.style.background = "rgba(255, 255, 255, 0.8)"; }, 80);
-            }
-        }
-
-        fireBtn.addEventListener('click', shoot);
-        // Dukungan klik keyboard Spasi untuk menembak di PC
-        window.addEventListener('keydown', (e) => { if(e.code === "Space") shoot(); });
-
-        function applyDamage(amount, isHeadshot) {
-            if (enemyHP <= 0) return;
-
-            enemyHP -= amount;
-            if (enemyHP < 0) enemyHP = 0;
-
-            // Update UI Health Bar
-            const hpPercent = (enemyHP / maxEnemyHP) * 100;
-            document.getElementById('enemy-hp').style.width = `${hpPercent}%`;
-
-            // Efek Angka Damage Pop-up di Tengah Layar
-            const dmgPop = document.createElement('div');
-            dmgPop.classList.add('damage-pop');
-            dmgPop.innerText = amount;
+            const birthDate = new Date(dateVal);
             
-            // Set warna: Merah jika Headshot, Kuning jika kena badan (Khas Free Fire!)
-            dmgPop.style.color = isHeadshot ? '#ff0000' : '#ffcc00';
+            // 1. Dapatkan Hari Masehi
+            const dayName = days[birthDate.getDay()];
+            const valDayNeptu = dayNeptu[dayName];
+
+            // 2. Hitung Pasaran Jawa (Algoritma Selisih Hari dari Benchmark Epoche)
+            // Benchmark: 7 Januari 1970 adalah Rabu Kliwon (Index Pasaran Kliwon = 4)
+            const baseDate = new Date("1970-01-07");
+            const diffTime = birthDate.getTime() - baseDate.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             
-            // Posisikan acak sedikit di dekat pusat layar agar tidak menumpuk
-            dmgPop.style.left = `${(window.innerWidth / 2) + (Math.random() * 40 - 20)}px`;
-            dmgPop.style.top = `${(window.innerHeight / 2) + (Math.random() * 40 - 20)}px`;
+            let pasaranIndex = (4 + (diffDays % 5)) % 5;
+            if (pasaranIndex < 0) pasaranIndex += 5; // Antisipasi jika lahir sebelum tahun 1970
             
-            document.body.appendChild(dmgPop);
-            setTimeout(() => { dmgPop.remove(); }, 500);
+            const pasaranName = pasarans[pasaranIndex];
+            const valPasaranNeptu = pasaranNeptu[pasaranName];
 
-            // Jika Musuh Mati
-            if (enemyHP === 0) {
-                showKillNotification();
-                respawnEnemy();
-            }
-        }
+            // 3. Hitung Jumlah Neptu
+            const totalNeptu = valDayNeptu + valPasaranNeptu;
 
-        function showKillNotification() {
-            const notif = document.getElementById('kill-notif');
-            notif.classList.add('show');
-            setTimeout(() => { notif.classList.remove('show'); }, 1500);
-        }
+            // 4. Olah Teks Karakter
+            const baseWatak = watakDatabase[pasaranName];
+            const finalPrediction = `Rahayu, <strong>${name}</strong>. Berdasarkan perhitungan Primbon, kamu lahir pada hari <strong>${dayName} ${pasaranName}</strong>. Karakter alamimu ${baseWatak} Dalam hal sosial, total nilai neptumu yang berjumlah ${totalNeptu} melambangkan energi spiritual yang kuat untuk membawa keharmonisan bagi keluarga di masa depan.`;
 
-        function respawnEnemy() {
-            setTimeout(() => {
-                enemyHP = maxEnemyHP;
-                document.getElementById('enemy-hp').style.width = '100%';
-                // Pindahkan lokasi musuh secara acak setelah mati agar tidak bosan
-                enemyGroup.position.x = Math.random() * 6 - 3; 
-                enemyGroup.position.z = Math.random() * -5 - 6; 
-            }, 1800);
-        }
-
-        // --- 6. GAME LOOP ANIMATION ---
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Animasi idle berayun halus pada musuh agar kelihatan hidup
-            if (enemyHP > 0) {
-                enemyGroup.position.y = Math.sin(Date.now() * 0.003) * 0.08;
-            } else {
-                // Efek jatuh jika mati tereliminasi
-                enemyGroup.position.y = -0.5;
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        // Menjaga rasio grafis seimbang saat layar HP dirotasikan
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            // Tampilkan Hasil ke UI dengan Efek Animasi
+            wetonTitle.innerText = `${dayName} ${pasaranName}`;
+            neptuTitle.innerText = `Neptu: ${totalNeptu} (${valDayNeptu} + ${valPasaranNeptu})`;
+            characterDesc.innerHTML = finalPrediction;
+            
+            resultBox.style.display = 'block';
         });
-
-        animate();
     </script>
 </body>
 </html>
