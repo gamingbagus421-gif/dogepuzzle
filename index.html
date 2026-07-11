@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Azure - Pembacaan Kartu Tarot</title>
+    <!-- Google Fonts untuk nuansa mistis -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --mystic-blue: #00d2ff;
+            --deep-purple: #1e1b4b;
+            --text-light: #f3f4f6;
+            --text-gray: #9ca3af;
+            --card-border: rgba(0, 210, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 210, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(30, 27, 75, 0.4) 0%, transparent 50%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.3rem;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(10, 15, 30, 0.75);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.1);
+            text-align: center;
+        }
+
+        /* Form Input */
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            margin-bottom: 0.7rem;
+            color: var(--text-gray);
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            max-width: 350px;
+            padding: 0.8rem 1.2rem;
+            background: rgba(3, 7, 18, 0.9);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            border-radius: 30px;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--mystic-blue);
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+        }
+
+        button {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(30, 27, 75, 0.6));
+            border: 1px solid var(--mystic-blue);
+            color: #fff;
+            padding: 0.8rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px var(--mystic-blue);
+        }
+
+        button:hover {
+            background: var(--mystic-blue);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--mystic-blue);
+            text-shadow: none;
+        }
+
+        /* Area Animasi Kartu 3D */
+        .card-zone {
+            margin: 2rem auto;
+            perspective: 1000px; /* Penting untuk efek 3D */
+            width: 180px;
+            height: 280px;
+            display: none; /* Sembunyikan sebelum diundi */
+        }
+
+        .tarot-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        /* Class untuk memicu perputaran kartu */
+        .tarot-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            border: 2px solid var(--mystic-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+
+        /* Tampilan Belakang Kartu (Motif Kosmik) */
+        .card-back {
+            background: linear-gradient(45deg, #050b18, #120e2e);
+            color: var(--mystic-blue);
+        }
+
+        .card-back .pattern {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 8px var(--mystic-blue));
+        }
+
+        /* Tampilan Depan Kartu (Hasil Tarot) */
+        .card-front {
+            background: linear-gradient(135deg, #0b1528, #1c133a);
+            transform: rotateY(180deg);
+            padding: 1rem;
+        }
+
+        .card-front .card-symbol {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-front .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px var(--mystic-blue);
+        }
+
+        /* Area Penjelasan Makna Ramalan */
+        .reading-result {
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--mystic-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-text {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            text-align: justify;
+            background: rgba(3, 7, 18, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 3px solid var(--mystic-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ORACLE OF AZURE</h1>
+        <p>Ramalan & Pembacaan Kartu Tarot Digital</p>
+    </header>
+
+    <div class="container">
+        <!-- Input Nama -->
+        <div class="input-group">
+            <label for="username">Tuliskan Namamu untuk Membuka Takdir:</label>
+            <input type="text" id="username" placeholder="Ketik namamu di sini..." autocomplete="off">
+        </div>
+
+        <button id="btn-draw">BUKA KARTU TAROT</button>
+
+        <!-- Area Kartu Visual -->
+        <div class="card-zone" id="card-zone">
+            <div class="tarot-card" id="tarot-card">
+                <!-- Sisi Belakang Kartu -->
+                <div class="card-face card-back">
+                    <div class="pattern">✨<br>🔮<br>✨</div>
+                </div>
+                <!-- Sisi Depan Kartu (Diisi oleh JS) -->
+                <div class="card-face card-front" id="card-front-content">
+                    <!-- Dinamis -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Penjelasan Makna -->
+        <div class="reading-result" id="reading-result">
+            <h3 class="result-title" id="result-heading">Hasil Pembacaan</h3>
+            <p class="result-text" id="result-desc"></p>
+        </div>
+    </div>
+
+    <script>
+        // Bank Data Kartu Tarot Mayor dan Maknanya
+        const tarotDeck = [
+            {
+                title: "THE FOOL (0)",
+                symbol: "🎒",
+                meaning: "Awal baru, kebebasan, dan petualangan menantang.",
+                desc: "Halo [nama], kartu **The Fool** menunjukkan bahwa kamu sedang berada di ambang siklus hidup yang baru. Jangan takut untuk mengambil risiko atau mencoba hobi/proyek baru yang selama ini kamu tunda. Ini adalah waktu yang tepat untuk melangkah maju dengan keyakinan penuh, meskipun jalannya belum sepenuhnya terlihat jelas!"
+            },
+            {
+                title: "THE MAGICIAN (I)",
+                symbol: "⚡",
+                meaning: "Kekuatan kehendak, manifestasi, dan potensi penuh.",
+                desc: "Kartu ini menandakan bahwa kamu, [nama], memiliki semua alat, bakat, dan kemampuan yang dibutuhkan untuk mewujudkan impianmu menjadi kenyataan saat ini. Apapun rencana besar atau eksperimen yang sedang kamu susun, fokuskan pikiranmu karena alam semesta sedang mendukung manifestasimu."
+            },
+            {
+                title: "THE HIGH PRIESTESS (II)",
+                symbol: "🌙",
+                meaning: "Intuisi, misteri, dan pengetahuan batin.",
+                desc: "Untuk [nama], kartu **The High Priestess** meminta kamu untuk mempercayai suara hatimu dan intuisimu di atas logika orang lain saat ini. Ada jawaban yang sedang kamu cari, dan jawaban itu sebenarnya sudah ada di dalam dirimu. Luangkan waktu sejenak untuk tenang dan dengarkan instingmu."
+            },
+            {
+                title: "THE EMPRESS (III)",
+                symbol: "👑",
+                meaning: "Kreativitas, kelimpahan, dan pertumbuhan.",
+                desc: "Kabar baik untuk [nama]! **The Empress** membawa energi kelimpahan, kreativitas yang meluap, dan rasa nyaman. Jika kamu sedang membangun sesuatu—baik itu karya kreatif, pertemanan, maupun rencana masa depan—hal tersebut diprediksi akan bertumbuh dengan sangat subur dan membawa kepuasan."
+            },
+            {
+                title: "THE EMPEROR (IV)",
+                symbol: "🦅",
+                meaning: "Struktur, kendali, dan otoritas diri.",
+                desc: "[nama], kartu **The Emperor** muncul untuk mengingatkanmu tentang pentingnya disiplin, strategi, dan organisasi saat ini. Kamu memegang kendali penuh atas hidupmu sendiri. Buatlah batasan yang tegas terhadap hal-hal yang mengganggu fokusmu, dan pimpin harimu dengan penuh ketegasan."
+            },
+            {
+                title: "THE LOVERS (VI)",
+                symbol: "💞",
+                meaning: "Harmoni, pilihan penting, dan hubungan erat.",
+                desc: "Kartu **The Lovers** menandakan adanya energi harmoni di sekitarmu, [nama]. Selain tentang hubungan dekat dengan teman atau pasangan, kartu ini sering kali mengisyaratkan bahwa kamu akan dihadapkan pada sebuah pilihan penting dalam hidup. Pilihlah keputusan yang paling selaras dengan nilai-nilai kejujuranmu."
+            }
+        ];
+
+        const btnDraw = document.getElementById('btn-draw');
+        const cardZone = document.getElementById('card-zone');
+        const tarotCard = document.getElementById('tarot-card');
+        const cardFrontContent = document.getElementById('card-front-content');
+        const readingResult = document.getElementById('reading-result');
+        const resultHeading = document.getElementById('result-heading');
+        const resultDesc = document.getElementById('result-desc');
+
+        btnDraw.addEventListener('click', () => {
+            const nameInput = document.getElementById('username').value.trim();
+            
+            if (nameInput === "") {
+                alert("Silakan masukkan namamu terlebih dahulu untuk membuka ramalan oracle!");
+                return;
+            }
+
+            // Reset tampilan jika user klik berulang kali
+            tarotCard.classList.remove('flipped');
+            readingResult.style.display = 'none';
+            cardZone.style.display = 'block';
+
+            // Mengundi kartu secara acak
+            const randomIndex = Math.floor(Math.random() * tarotDeck.length);
+            const selectedCard = tarotDeck[randomIndex];
+
+            // Pasang konten kartu bagian depan sesuai hasil undian
+            cardFrontContent.innerHTML = `
+                <div class="card-symbol">${selectedCard.symbol}</div>
+                <div class="card-title">${selectedCard.title}</div>
+            `;
+
+            // Efek Delay Animasi (Meniru proses ritual membuka kartu)
+            setTimeout(() => {
+                // Balik kartu ke depan (Efek 3D)
+                tarotCard.classList.add('flipped');
+
+                // Siapkan teks penjelasan dan sisipkan nama pengguna ke dalam ramalan
+                const customizedDesc = selectedCard.desc.replace(/\[nama\]/g, `<strong>${nameInput}</strong>`);
+                
+                resultHeading.innerText = `Hasil Untuk ${nameInput}: ${selectedCard.title} (${selectedCard.meaning})`;
+                resultDesc.innerHTML = customizedDesc;
+
+                // Tampilkan teks penjelasan dengan efek fade-in setelah kartu selesai berputar
+                setTimeout(() => {
+                    readingResult.style.display = 'block';
+                }, 600);
+
+            }, 300);
+        });
+    </script>
+</body>
+</html>
