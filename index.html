@@ -2,412 +2,380 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Dragon Clicker</title>
-    <!-- Google Fonts untuk nuansa Game Sci-Fi -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Free Fire HTML Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #9d4edd;
-            --bg-dark: #050914;
-            --panel-bg: rgba(10, 20, 38, 0.7);
-            --border-blue: rgba(0, 243, 255, 0.3);
-            --text-light: #e2f1ff;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            user-select: none; /* Agar layar tidak terblok saat diklik cepat */
+            user-select: none;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 50%, #0a1530 0%, #050914 100%);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            overflow-x: hidden;
-        }
-
-        /* Container Utama Game */
-        .game-container {
+        body, html {
             width: 100%;
-            max-width: 900px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            background: var(--panel-bg);
-            border: 2px solid var(--border-blue);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
-            position: relative;
-        }
-
-        /* Dekonstruksi Sudut Khas Sci-Fi */
-        .game-container::before {
-            content: 'SYSTEM: ONLINE';
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #00f3ff;
-            color: #000;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 900;
-            padding: 2px 10px;
-            border-radius: 4px;
-            letter-spacing: 1px;
         }
 
-        /* SISI KIRI: Area Klik & Skor */
-        .clicker-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid rgba(0, 243, 255, 0.1);
-            padding-right: 1rem;
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
-        .score-display {
+        /* Crosshair ala FF (Titik Merah saat Kena Musuh) */
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            border: 2px solid #000;
+            transition: background 0.1s;
+        }
+
+        /* UI Darah Musuh (HP Bar) */
+        #enemy-ui {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            margin-bottom: 2rem;
+            width: 300px;
         }
 
-        .score-display h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.8rem;
+        #enemy-name {
             color: #fff;
-            text-shadow: 0 0 15px var(--neon-blue);
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px #000;
         }
 
-        .cps-display {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 1.1rem;
-            color: #8ba3c7;
-            margin-top: 0.2rem;
+        .hp-bar-bg {
+            width: 100%;
+            height: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #fff;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
-        /* Tombol Utama Inti Naga */
-        .dragon-core-wrapper {
-            position: relative;
-            cursor: pointer;
+        #enemy-hp {
+            width: 100%;
+            height: 100%;
+            background: #ff0055;
+            transition: width 0.1s;
         }
 
-        .dragon-core {
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, #00f3ff 0%, #0044ff 70%);
+        /* HUD Kontrol Kanan (Tombol Tembak ala FF Mobile) */
+        #controls-right {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-fire {
+            width: 85px;
+            height: 85px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 3px solid #ff4500;
             border-radius: 50%;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
-            transition: transform 0.05s ease;
-            position: relative;
-            z-index: 2;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+            active-transform: scale(0.9);
         }
 
-        /* Efek Denyut Latar Belakang Inti */
-        .core-pulse {
+        .btn-fire::before {
+            content: '🔥';
+            font-size: 2rem;
+        }
+
+        /* Efek Pop-up Angka Damage */
+        .damage-pop {
             position: absolute;
-            top: 0; left: 0; width: 200px; height: 200px;
-            background: rgba(0, 243, 255, 0.3);
-            border-radius: 50%;
-            z-index: 1;
-            animation: corePulse 2s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes corePulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.4); opacity: 0; }
-        }
-
-        .dragon-core:active {
-            transform: scale(0.92);
-        }
-
-        /* Efek Teks Melayang (+1) Saat Diklik */
-        .floating-text {
-            position: absolute;
-            color: var(--neon-blue);
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: floatDamage 0.5s ease-out forwards;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        @keyframes floatDamage {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
+            50% { transform: translate(-50%, -50%) scale(1.4) translateY(-30px); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-60px); }
+        }
+
+        /* Notifikasi Kill */
+        #kill-notif {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            color: #fff;
+            background: rgba(255, 69, 0, 0.8);
+            padding: 10px 30px;
+            border-radius: 5px;
             font-size: 1.5rem;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 0 20px #ff4500;
             pointer-events: none;
-            z-index: 10;
-            animation: floatUp 0.6s ease-out forwards;
-            text-shadow: 0 0 8px var(--neon-blue);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(0.8); }
-        }
-
-        /* SISI KANAN: Menu Upgrade */
-        .upgrade-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .upgrade-section h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            border-bottom: 2px solid var(--border-blue);
-            padding-bottom: 0.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
-
-        /* Item Upgrade */
-        .upgrade-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(3, 12, 26, 0.6);
-            border: 1px solid rgba(0, 243, 255, 0.15);
-            border-radius: 10px;
-            padding: 0.8rem 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        /* Status Tombol Jika Belum Mampu Beli (Glow Redup) */
-        .upgrade-item.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .upgrade-item:not(.disabled):hover {
-            border-color: var(--neon-blue);
-            background: rgba(0, 243, 255, 0.05);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-
-        .upgrade-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .upgrade-name {
-            font-weight: 600;
-            font-size: 1rem;
-            color: #fff;
-        }
-
-        .upgrade-effect {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--neon-blue);
-        }
-
-        .upgrade-cost {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.95rem;
-            color: #ffb703;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        .upgrade-count {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--neon-purple);
-            margin-left: 1rem;
-            min-width: 30px;
-            text-align: right;
-        }
-
-        /* Responsif Layar Kecil / HP */
-        @media (max-width: 768px) {
-            .game-container { grid-template-columns: 1fr; gap: 3rem; }
-            .clicker-section { border-right: none; border-bottom: 1px solid rgba(0, 243, 255, 0.1); padding-right: 0; padding-bottom: 2rem; }
+        #kill-notif.show {
+            transform: translate(-50%, -50%) scale(1);
         }
     </style>
 </head>
 <body>
 
-    <div class="game-container">
-        
-        <!-- Bagian Klik Utama (Kiri) -->
-        <div class="clicker-section">
-            <div class="score-display">
-                <h1 id="energy-display">0</h1>
-                <div class="cps-display">ENERGY GENERATED (per detik: <span id="cps-val">0</span>)</div>
-            </div>
-            
-            <div class="dragon-core-wrapper" id="core-trigger">
-                <div class="core-pulse"></div>
-                <div class="dragon-core">🐉</div>
-            </div>
+    <div id="crosshair"></div>
+    
+    <!-- UI Status Musuh -->
+    <div id="enemy-ui">
+        <div id="enemy-name">TARGET BOT (LEVEL 1)</div>
+        <div class="hp-bar-bg">
+            <div id="enemy-hp"></div>
         </div>
-
-        <!-- Bagian Toko/Shop Upgrade (Kanan) -->
-        <div class="upgrade-section">
-            <h2>UPGRADE PROTOCOL</h2>
-            
-            <!-- Upgrade 1: Auto-Clicker Lemah -->
-            <div class="upgrade-item disabled" id="upg-1" onclick="buyUpgrade(0)">
-                <div class="upgrade-info">
-                    <span class="upgrade-name">🤖 Hacker Drone</span>
-                    <span class="upgrade-effect">+1 Energi / detik</span>
-                </div>
-                <div>
-                    <div class="upgrade-cost" id="cost-1">Cost: 15</div>
-                    <div class="upgrade-count" id="count-1">0</div>
-                </div>
-            </div>
-
-            <!-- Upgrade 2: Menengah -->
-            <div class="upgrade-item disabled" id="upg-2" onclick="buyUpgrade(1)">
-                <div class="upgrade-info">
-                    <span class="upgrade-name">🛡️ Cyber Minion</span>
-                    <span class="upgrade-effect">+8 Energi / detik</span>
-                </div>
-                <div>
-                    <div class="upgrade-cost" id="cost-2">Cost: 100</div>
-                    <div class="upgrade-count" id="count-2">0</div>
-                </div>
-            </div>
-
-            <!-- Upgrade 3: Kuat -->
-            <div class="upgrade-item disabled" id="upg-3" onclick="buyUpgrade(2)">
-                <div class="upgrade-info">
-                    <span class="upgrade-name">⚡ Quantum Core</span>
-                    <span class="upgrade-effect">+50 Energi / detik</span>
-                </div>
-                <div>
-                    <div class="upgrade-cost" id="cost-3">Cost: 1100</div>
-                    <div class="upgrade-count" id="count-3">0</div>
-                </div>
-            </div>
-
-            <!-- Upgrade 4: Sangat Kuat -->
-            <div class="upgrade-item disabled" id="upg-4" onclick="buyUpgrade(3)">
-                <div class="upgrade-info">
-                    <span class="upgrade-name">🌌 Nebula Matrix</span>
-                    <span class="upgrade-effect">+260 Energi / detik</span>
-                </div>
-                <div>
-                    <div class="upgrade-cost" id="cost-4">Cost: 12000</div>
-                    <div class="upgrade-count" id="count-4">0</div>
-                </div>
-            </div>
-
-        </div>
-
     </div>
 
+    <!-- Papan Pengumuman Kill -->
+    <div id="kill-notif">💀 KNOCK OUT!</div>
+
+    <!-- Kontrol Tembak -->
+    <div id="controls-right">
+        <div class="btn-fire" id="btn-fire"></div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Memuat Library Grafis 3D (Three.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
-        // --- DATA STATE GAME ---
-        let energy = 0;
-        let totalCPS = 0; // Click Per Second (Energi per detik)
+        // --- 1. SETUP DOOM / AMBIENCE 3D ---
+        const canvas = document.getElementById('gameCanvas');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xa0a0a0); // Langit abu-abu cerah
+        scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 
-        // Array daftar upgrade barang beserta harga dan statistiknya
-        const upgrades = [
-            { id: 1, baseCost: 15, currentCost: 15, count: 0, cpsValue: 1 },
-            { id: 2, baseCost: 100, currentCost: 100, count: 0, cpsValue: 8 },
-            { id: 3, baseCost: 1100, currentCost: 1100, count: 0, cpsValue: 50 },
-            { id: 4, baseCost: 12000, currentCost: 12000, count: 0, cpsValue: 260 }
-        ];
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
 
-        const coreTrigger = document.getElementById('core-trigger');
-        const energyDisplay = document.getElementById('energy-display');
-        const cpsValDisplay = document.getElementById('cps-val');
+        // Pencahayaan
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+        hemiLight.position.set(0, 20, 0);
+        scene.add(hemiLight);
 
-        // --- 1. MEKANIK KLIK UTAMA ---
-        coreTrigger.addEventListener('click', (e) => {
-            energy += 1;
-            updateUI();
-            createFloatingText(e.clientX, e.clientY);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(3, 10, 10);
+        scene.add(dirLight);
+
+        // Lantai/Tanah Lapangan Bermain
+        const floorGeo = new THREE.PlaneGeometry(100, 100);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x557a46, roughness: 0.8 }); // Rumput hijau tua
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        scene.add(floor);
+
+        // --- 2. MEMBUAT PLAYER & KAMERA (Sudut Pandang TPS) ---
+        const playerGroup = new THREE.Group();
+        scene.add(playerGroup);
+
+        // Karakter Utama Sederhana (Kapsul Kuning)
+        const playerGeo = new THREE.CapsuleGeometry(0.4, 1, 4, 8);
+        const playerMat = new THREE.MeshStandardMaterial({ color: 0xffd700 });
+        const playerMesh = new THREE.Mesh(playerGeo, playerMat);
+        playerMesh.position.y = 0.9;
+        playerGroup.add(playerMesh);
+
+        // Posisikan Kamera di belakang bahu Karakter (Khas Free Fire)
+        camera.position.set(0, 2.5, 3.5);
+        playerGroup.add(camera);
+
+        // --- 3. MEMBUAT MUSUH (BOT TARGET) ---
+        let enemyHP = 200;
+        const maxEnemyHP = 200;
+
+        const enemyGroup = new THREE.Group();
+        enemyGroup.position.set(0, 0, -8); // Berjarak 8 meter di depan player
+        scene.add(enemyGroup);
+
+        // Badan Musuh (Warna Merah Tua)
+        const bodyGeo = new THREE.BoxGeometry(0.8, 1.2, 0.5);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x990000 });
+        const enemyBody = new THREE.Mesh(bodyGeo, bodyMat);
+        enemyBody.position.y = 0.6;
+        enemyBody.name = "body"; // Penanda Bagian Tubuh
+        enemyGroup.add(enemyBody);
+
+        // Kepala Musuh (Warna Putih/Topeng)
+        const headGeo = new THREE.SphereGeometry(0.3, 16, 16);
+        const headMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        const enemyHead = new THREE.Mesh(headGeo, headMat);
+        enemyHead.position.y = 1.4;
+        enemyHead.name = "head"; // Penanda Bagian Kepala
+        enemyGroup.add(enemyHead);
+
+        // --- 4. LOGIKA ROTASI KAMERA (Geser Layar untuk Membidik) ---
+        let isAiming = false;
+        let previousTouchX, previousTouchY;
+
+        // Kontrol Mouse (untuk PC)
+        window.addEventListener('mousedown', (e) => { if(e.target === canvas) isAiming = true; });
+        window.addEventListener('mouseup', () => { isAiming = false; });
+        window.addEventListener('mousemove', (e) => {
+            if (isAiming) {
+                playerGroup.rotation.y -= e.movementX * 0.003;
+            }
         });
 
-        // Membuat Teks Melayang "+1" Tepat di Posisi Kursor Mouse Saat Klik
-        function createFloatingText(x, y) {
-            const text = document.createElement('div');
-            text.classList.add('floating-text');
-            text.innerText = '+1';
-            text.style.left = `${x}px`;
-            text.style.top = `${y}px`;
-            document.body.appendChild(text);
-
-            // Hapus elemen teks dari memori setelah animasi selesai biar web tidak lag
-            setTimeout(() => {
-                text.remove();
-            }, 600);
-        }
-
-        // --- 2. MEKANIK BELI UPGRADE ---
-        function buyUpgrade(index) {
-            const item = upgrades[index];
-            
-            // Jika energi cukup untuk membeli barang tersebut
-            if (energy >= item.currentCost) {
-                energy -= item.currentCost;
-                item.count++;
-                
-                // Rumus menaikkan harga upgrade berikutnya (harga naik 15% setiap dibeli)
-                item.currentCost = Math.floor(item.baseCost * Math.pow(1.15, item.count));
-                
-                // Hitung ulang total energi otomatis per detik (CPS)
-                recalculateCPS();
-                updateUI();
+        // Kontrol Sentuh Layar (untuk HP)
+        window.addEventListener('touchstart', (e) => {
+            if(e.target === canvas) {
+                isAiming = true;
+                previousTouchX = e.touches[0].clientX;
+                previousTouchY = e.touches[0].clientY;
             }
-        }
+        });
+        window.addEventListener('touchend', () => { isAiming = false; });
+        window.addEventListener('touchmove', (e) => {
+            if (isAiming) {
+                const touchX = e.touches[0].clientX;
+                const deltaX = touchX - previousTouchX;
+                playerGroup.rotation.y -= deltaX * 0.005;
+                previousTouchX = touchX;
+            }
+        });
 
-        function recalculateCPS() {
-            totalCPS = upgrades.reduce((sum, item) => sum + (item.count * item.cpsValue), 0);
-            cpsValDisplay.innerText = totalCPS;
-        }
+        // --- 5. MEKANIK TEMBAKAN & REGISTER DAMAGE ---
+        const raycaster = new THREE.Raycaster();
+        const fireBtn = document.getElementById('btn-fire');
+        const crosshair = document.getElementById('crosshair');
 
-        // --- 3. REFRESH & UPDATE TAMPILAN INTERFACES ---
-        function updateUI() {
-            // Update skor energi utama bulat ke bawah
-            energyDisplay.innerText = Math.floor(energy);
+        function shoot() {
+            // Tembak lurus dari tengah layar (titik crosshair)
+            const center = new THREE.Vector2(0, 0); 
+            raycaster.setFromCamera(center, camera);
 
-            // Cek setiap item di toko, beri nyala glow jika mampu dibeli
-            upgrades.forEach((item, idx) => {
-                const element = document.getElementById(`upg-${item.id}`);
-                const costText = document.getElementById(`cost-${item.id}`);
-                const countText = document.getElementById(`count-${item.id}`);
+            // Cek objek apa saja yang tertembus peluru pelacak
+            const intersects = raycaster.intersectObjects(enemyGroup.children);
 
-                costText.innerText = `Cost: ${item.currentCost}`;
-                countText.innerText = item.count;
+            if (intersects.length > 0) {
+                const hitObject = intersects[0].object;
+                let damage = 0;
+                let isHeadshot = false;
 
-                if (energy >= item.currentCost) {
-                    element.classList.remove('disabled');
-                } else {
-                    element.classList.add('disabled');
+                if (hitObject.name === "head") {
+                    damage = Math.floor(Math.random() * (45 - 35) + 110); // Damage besar (Headshot)
+                    isHeadshot = true;
+                } else if (hitObject.name === "body") {
+                    damage = Math.floor(Math.random() * (28 - 18) + 18); // Damage standar (Badan)
                 }
-            });
+
+                // Kurangi Darah Musuh
+                applyDamage(damage, isHeadshot);
+                
+                // Ubah Indikator Crosshair jadi merah sesaat sebagai feedback hit
+                crosshair.style.background = "red";
+                setTimeout(() => { crosshair.style.background = "rgba(255, 255, 255, 0.8)"; }, 80);
+            }
         }
 
-        // --- 4. ENGINE TIMER OTOMATIS (GAME LOOP) ---
-        // Menambahkan energi per detik secara berkala (dijalankan setiap 100ms agar pergerakan angka mulus)
-        setInterval(() => {
-            if (totalCPS > 0) {
-                energy += (totalCPS / 10);
-                updateUI();
+        fireBtn.addEventListener('click', shoot);
+        // Dukungan klik keyboard Spasi untuk menembak di PC
+        window.addEventListener('keydown', (e) => { if(e.code === "Space") shoot(); });
+
+        function applyDamage(amount, isHeadshot) {
+            if (enemyHP <= 0) return;
+
+            enemyHP -= amount;
+            if (enemyHP < 0) enemyHP = 0;
+
+            // Update UI Health Bar
+            const hpPercent = (enemyHP / maxEnemyHP) * 100;
+            document.getElementById('enemy-hp').style.width = `${hpPercent}%`;
+
+            // Efek Angka Damage Pop-up di Tengah Layar
+            const dmgPop = document.createElement('div');
+            dmgPop.classList.add('damage-pop');
+            dmgPop.innerText = amount;
+            
+            // Set warna: Merah jika Headshot, Kuning jika kena badan (Khas Free Fire!)
+            dmgPop.style.color = isHeadshot ? '#ff0000' : '#ffcc00';
+            
+            // Posisikan acak sedikit di dekat pusat layar agar tidak menumpuk
+            dmgPop.style.left = `${(window.innerWidth / 2) + (Math.random() * 40 - 20)}px`;
+            dmgPop.style.top = `${(window.innerHeight / 2) + (Math.random() * 40 - 20)}px`;
+            
+            document.body.appendChild(dmgPop);
+            setTimeout(() => { dmgPop.remove(); }, 500);
+
+            // Jika Musuh Mati
+            if (enemyHP === 0) {
+                showKillNotification();
+                respawnEnemy();
             }
-        }, 100);
+        }
+
+        function showKillNotification() {
+            const notif = document.getElementById('kill-notif');
+            notif.classList.add('show');
+            setTimeout(() => { notif.classList.remove('show'); }, 1500);
+        }
+
+        function respawnEnemy() {
+            setTimeout(() => {
+                enemyHP = maxEnemyHP;
+                document.getElementById('enemy-hp').style.width = '100%';
+                // Pindahkan lokasi musuh secara acak setelah mati agar tidak bosan
+                enemyGroup.position.x = Math.random() * 6 - 3; 
+                enemyGroup.position.z = Math.random() * -5 - 6; 
+            }, 1800);
+        }
+
+        // --- 6. GAME LOOP ANIMATION ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animasi idle berayun halus pada musuh agar kelihatan hidup
+            if (enemyHP > 0) {
+                enemyGroup.position.y = Math.sin(Date.now() * 0.003) * 0.08;
+            } else {
+                // Efek jatuh jika mati tereliminasi
+                enemyGroup.position.y = -0.5;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Menjaga rasio grafis seimbang saat layar HP dirotasikan
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
     </script>
 </body>
 </html>
