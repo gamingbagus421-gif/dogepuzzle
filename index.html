@@ -100,7 +100,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #fff; /* Latar putih biar kontras gambar kucingnya keliatan jelas */
+            background-color: #fff;
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -109,8 +109,8 @@
         #jumpscareImage {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Gambar kucing penuh satu layar */
-            animation: shake 0.1s infinite; /* Efek getar biar makin kaget */
+            object-fit: contain;
+            animation: shake 0.1s infinite;
         }
         @keyframes shake {
             0% { transform: translate(2px, 1px) rotate(0deg); }
@@ -156,14 +156,12 @@
 
     <!-- Kontainer Jumpscare Kucing -->
     <div id="jumpscareZone">
-        <!-- Gambar Kucing Kaget / Duarr (Bisa diganti link gambar buatanmu sendiri) -->
         <img id="jumpscareImage" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1000&auto=format&fit=crop" alt="DUARR!">
         <div class="jumpscare-text">DUAARRR!!! 🐱💥</div>
     </div>
 
-    <!-- AUDIO UNTUK SENSASI KAGET -->
-    <!-- Sound effect "Duarr" ledakan kartun / lucu (bisa diganti) -->
-    <audio id="scareSound" src="https://www.soundjay.com/mechanical/sounds/explosion-02.mp3" preload="auto"></audio>
+    <!-- AUDIO JUMPSCARE KARTUN/LUCU TERBARU -->
+    <audio id="scareSound" src="https://assets.mixkit.co/active_storage/sfx/2211/2211-84.wav" preload="auto"></audio>
 
     <script>
         function checkAnswer() {
@@ -174,12 +172,9 @@
                 return;
             }
 
-            // Jawaban yang benar adalah 5 (karena direbus bersamaan)
             if (parseInt(answer) === 5) {
-                // Jika mereka pintar dan menjawab benar, kasih selamat
                 alert("Wah gila, kamu pinter banget! Jawaban kamu BENAR! 🎉");
             } else {
-                // JIKA SALAH -> MICU JUMPSCARE KUCING IMUT
                 triggerJumpscare();
             }
         }
@@ -188,21 +183,25 @@
             const scareZone = document.getElementById('jumpscareZone');
             const sound = document.getElementById('scareSound');
 
-            // 1. Munculkan area gambar kucing secara penuh
+            // Munculkan area gambar kucing
             scareZone.style.display = "flex";
 
-            // 2. Putar suara ledakan keras secara instan
-            sound.volume = 1.0; // Set volume maksimal
+            // Mainkan suara teriakan lucu dengan volume penuh
+            sound.volume = 1.0;
+            
+            // Trik paksa audio mengulang dari awal (biar instan responsnya)
+            sound.currentTime = 0; 
+            
             sound.play().catch(function(error) {
-                console.log("Browser memblokir auto-play suara sebelum ada interaksi.");
+                console.log("Audio sempat terblokir kebijakan browser, silakan klik layar dulu.");
             });
 
-            // 3. Setelah 4 detik, hilangkan jumpscare-nya dan kembalikan ke game biar mereka tertawa
+            // Sembunyikan kembali setelah 3.5 detik
             setTimeout(() => {
                 scareZone.style.display = "none";
                 alert("Ciyee kaget ya! Makanya fokus dong, kan telurnya direbus barengan! 😜🐱");
-                document.getElementById('userAnswer').value = ""; // Reset input
-            }, 4000);
+                document.getElementById('userAnswer').value = ""; 
+            }, 3500);
         }
     </script>
 </body>
