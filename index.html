@@ -3,283 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 ULTRA BRAIN ARCADE v1.0 🎮</title>
+    <title>DOGE'S WORD PUZZLES</title>
     <style>
-        /* --- CORE GAME RETRO STYLE --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        /* Tampilan Utama Website */
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Montserrat', sans-serif; /* Menggunakan font yang bersih, atau mirip di gambar */
+            background-color: #fcebbb; /* Latar belakang kuning muda */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            color: #fff;
         }
 
-        /* --- ARCADE MACHINE HUD --- */
-        .game-machine {
-            background: #1a1a2e;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        .browser-window {
             width: 90%;
-            max-width: 480px;
-            text-align: center;
-            border: 6px solid #e94560;
-            position: relative;
-        }
-
-        /* Detail Lampu Lampu Game */
-        .game-machine::before {
-            content: "• ONLINE • SCORE: 9999 • STAGE 1";
-            display: block;
-            font-size: 11px;
-            color: #00ff66;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-
-        /* HP Bar Palsu Biar Keren */
-        .hp-bar-container {
-            width: 100%;
-            background: #0f3460;
-            height: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #fff;
+            max-width: 1000px;
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             overflow: hidden;
-        }
-        .hp-bar {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, #00ff66, #99ff33);
+            display: flex;
+            flex-direction: column;
         }
 
-        h1 {
-            color: #e94560;
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px #0f3460;
+        .header {
+            background-color: #f7b731; /* Header kuning tua */
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ccc;
         }
 
-        /* AREA TEKA-TEKI */
-        .puzzle-screen {
-            background: #16213e;
-            padding: 25px 15px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 25px;
-            border-left: 5px solid #00fff0;
-            min-height: 100px;
+        .logo-section {
             display: flex;
             align-items: center;
-            justify-content: center;
-            line-height: 1.5;
+            gap: 10px;
         }
 
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 3px solid #0f3460;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            text-align: center;
-            outline: none;
-            margin-bottom: 15px;
-            background: #1a1a2e;
-            color: #00fff0;
-            font-family: inherit;
-        }
-        input:focus {
-            border-color: #e94560;
-            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+        .header h1 {
+            color: #4b3621;
+            margin: 0;
+            font-size: 24px;
         }
 
-        button {
-            background: #e94560;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1rem;
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #4b3621;
+            background-color: #fcebbb;
+            padding: 5px 15px;
+            border-radius: 15px;
             font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 5px 0 #950740;
-            font-family: inherit;
-            transition: 0.1s;
-        }
-        button:hover {
-            transform: translateY(2px);
-            box-shadow: 0 3px 0 #950740;
-        }
-        button:active {
-            transform: translateY(5px);
-            box-shadow: 0 0px 0 #950740;
         }
 
-        /* --- ZONA JUMPSCARE DOGE IMUT --- */
-        #jumpscareZone {
+        .search-bar {
+            background-color: #fcebbb;
+            border-radius: 15px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            background-color: #fff9e1; /* Area konten utama krem */
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .puzzle-box {
+            background-color: #fff9e1;
+            border: 4px solid #ccab70; /* Warna frame cokelat */
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            max-width: 500px;
+        }
+
+        .central-shiba-head {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #ccab70;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-image: 1;
+        }
+
+        .shiba-icon {
+            font-size: 60px;
+        }
+
+        .puzzle-title {
+            color: #4b3621;
+            font-size: 20px;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        .puzzle-clue {
+            color: #6d543e;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .answer-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .answer-label {
+            color: #4b3621;
+        }
+
+        .answer-input {
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .paw-print {
+            color: #ccab70;
+            font-size: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            background-color: #f7b731;
+            border: none;
+            color: #4b3621;
+            padding: 10px 30px;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .hint-btn {
+            background-color: #85d1e2; /* Biru muda */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .more-puzzles-btn {
+            background-color: #85d1e2;
+            border: none;
+            color: white;
+            padding: 10px 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            background-color: #f7b731;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #4b3621;
+            border-top: 2px solid #ccc;
+        }
+
+        /* Jumpscare Layover */
+        .jumpscare-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #ffd200; /* Kuning khas warna Doge */
-            z-index: 9999;
+            background-color: black;
+            z-image: 9999; /* Sangat tinggi */
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-        }
-        #dogeImage {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            animation: ultraShake 0.05s infinite alternate;
-        }
-        
-        /* Efek getar intensitas tinggi */
-        @keyframes ultraShake {
-            0% { transform: translate(5px, 5px) scale(1.05) rotate(1deg); }
-            100% { transform: translate(-5px, -5px) scale(0.95) rotate(-1deg); }
+            opacity: 0; /* Mulai tersembunyi */
+            transition: opacity 0.1s ease-in; /* Flash effect */
         }
 
-        .doge-text {
-            position: absolute;
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 5px 5px 0px #000, -5px -5px 0px #000, 5px -5px 0px #000, -5px 5px 0px #000;
-            font-family: 'Impact', sans-serif;
-            letter-spacing: 2px;
-            animation: textPulse 0.2s infinite alternate;
+        .jumpscare-overlay.show {
+            display: flex;
+            opacity: 1;
         }
-        @keyframes textPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.2); }
+
+        .jumpscare-image {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 15px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Kontainer Mesin Game Arcade -->
-    <div class="game-machine" id="gameBox">
-        <h1>⚡ INTELLECT CONSOLE ⚡</h1>
-        
-        <div class="hp-bar-container">
-            <div class="hp-bar"></div>
+    <div class="browser-window">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <span>🐾</span> <!-- Simbol paw print sederhana -->
+                <h1>DOGE'S WORD PUZZLES</h1>
+            </div>
+            <div class="nav">
+                <a href="#">Home</a>
+                <a href="#">Puzzles</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <span>🔍</span> <!-- Simbol search sederhana -->
+            </div>
         </div>
 
-        <!-- Layar Teka-Teki -->
-        <div class="puzzle-screen" id="questionBox">
-            Memuat teka-teki logika...
+        <!-- Konten Utama -->
+        <div class="main-content">
+            <div class="puzzle-box">
+                <div class="central-shiba-head">
+                    <span class="shiba-icon">🐶</span> <!-- Simbol kepala anjing sederhana -->
+                </div>
+                
+                <p id="puzzle-title" class="puzzle-title">Teka Teki Kata Hari Ini:</p>
+                <p id="puzzle-clue" class="puzzle-clue">Sedang memuat teka teki...</p>
+                
+                <div class="answer-input-container">
+                    <span class="answer-label">Jawaban Anda:</span>
+                    <input type="text" id="answer-input" class="answer-input" placeholder="...">
+                    <span class="paw-print">🐾</span>
+                </div>
+
+                <div class="button-container">
+                    <button id="submit-btn" class="submit-btn">Sumbit Jawaban</button>
+                    <button class="hint-btn">Minta Bantuan</button>
+                </div>
+                
+                <button id="next-puzzle-btn" class="more-puzzles-btn">Teka Teki Lainnya</button>
+            </div>
         </div>
 
-        <!-- Kolom Jawaban -->
-        <input type="text" id="userAnswer" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
-        
-        <button onclick="checkAnswer()">SUBMIT ANSWER 🕹️</button>
+        <!-- Footer -->
+        <div class="footer">
+            <span>Kebijakan</span> | <span>Kontak</span> | <span>Sosial Media: @DogePuzzle</span>
+        </div>
     </div>
 
-    <!-- Kontainer Jumpscare Doge -->
-    <div id="jumpscareZone">
-        <!-- Foto Meme Doge Wajah Imut Original -->
-        <img id="dogeImage" src="https://images.vrt.be/width1280/2021/06/10/8348ee73-ca04-11eb-a13a-02b72993b53b.jpg" alt="Doge">
-        <div class="doge-text">DUARRR!!! 🐕✨</div>
+    <!-- Jumpscare Layover -->
+    <div id="jumpscare-overlay" class="jumpscare-overlay">
+        <!-- Pastikan Anda memiliki gambar scary-shiba.jpg -->
+        <img src="scary-shiba.jpg" alt="Imut tapi Seram Shiba!" class="jumpscare-image">
+        <!-- Pastikan Anda memiliki file scary-scream.mp3 -->
+        <audio id="scary-audio" src="scary-scream.mp3" preload="auto"></audio>
     </div>
-
-    <!-- AUDIO UNTUK MERUSAK KEHENINGAN -->
-    <!-- Sound effect klakson konyol berfrekuensi tinggi + ketukan kencang -->
-    <audio id="scareSound" src="https://assets.mixkit.co/active_storage/sfx/2211/2211-84.wav" preload="auto"></audio>
 
     <script>
-        // Kumpulan Database Teka-Teki Random beserta Kunci Jawabannya
-        const puzzleDatabase = [
-            {
-                q: "Pertanyaan #1: Gajah apa yang belalainya pendek?",
-                a: ["gajah pesek", "gajah pndk", "gajah bersin"] 
-            },
-            {
-                q: "Pertanyaan #2: Kalau singa jadi ayam, lalu sapi jadi ayam, maka ayam jadi apa?",
-                a: ["banyak", "jadi banyak", "bnyk"]
-            },
-            {
-                q: "Pertanyaan #3: Ada orang berjalan di gurun pasir. Setiap dia menoleh ke belakang, kenapa dia tidak melihat jejak kakinya?",
-                a: ["jalan mundur", "dia mundur", "berjalan mundur"]
-            },
-            {
-                q: "Pertanyaan #4: Apa bedanya soto sama siti?",
-                a: ["soto dipukul siti menangis", "soto dipukul", "kalo soto dipukul siti menangis"]
-            },
-            {
-                q: "Pertanyaan #5: Lemari apa yang bisa dimasukkan ke dalam dompet?",
-                a: ["lembaran uang", "lemari uang", "lembaran duit"]
-            }
+        // Data Teka-Teki (Minta Jumpscare saat Jawaban Salah)
+        // Format: { klu: "tanda tanya", jawaban: "kata kunci tunggal" }
+        const puzzles = [
+            { klu: "Apa yang kamu pakai, yang tidak bisa kamu sentuh? Tapi jika kamu kehilangannya, kamu tidak bisa melihat.", jawaban: "kacamata" },
+            { klu: "Aku punya leher, tapi tidak punya kepala. Aku punya dua lengan, tapi tidak punya jari. Siapakah aku?", jawaban: "baju" },
+            { klu: "Aku selalu ada di hadapanmu, tapi kamu tidak pernah bisa melihatku. Siapakah aku?", jawaban: "masa depan" },
+            { klu: "Apa yang menjadi lebih panjang saat kamu menariknya, tetapi bisa merusak keasliannya?", jawaban: "karet" },
+            { klu: "Semakin banyak kamu mengambil darinya, semakin besar dia menjadi. Siapakah aku?", jawaban: "lubang" },
+            { klu: "Jika kamu memberiku makan, aku akan hidup. Tapi jika kamu memberiku minum, aku akan mati.", jawaban: "api" },
+            { klu: "Aku memiliki empat roda dan bisa melaju cepat, tapi aku bukan mobil.", jawaban: "kereta api" }
         ];
 
-        let currentActivePuzzle = null;
+        let currentPuzzle;
+        const jumpscareOverlay = document.getElementById('jumpscare-overlay');
+        const scaryAudio = document.getElementById('scary-audio');
+        const answerInput = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextPuzzleBtn = document.getElementById('next-puzzle-btn');
+        const puzzleTitle = document.getElementById('puzzle-title');
+        const puzzleClue = document.getElementById('puzzle-clue');
 
-        // Fungsi memilih teka-teki secara acak
-        function randomizeQuestion() {
-            const randomIndex = Math.floor(Math.random() * puzzleDatabase.length);
-            currentActivePuzzle = puzzleDatabase[randomIndex];
-            document.getElementById('questionBox').innerText = currentActivePuzzle.q;
+        // Fungsi untuk Mengacak dan Menampilkan Teka-Teki
+        function loadRandomPuzzle() {
+            // Pilih satu yang berbeda dari yang terakhir (sederhana)
+            let newPuzzle;
+            do {
+                newPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+            } while (newPuzzle === currentPuzzle);
+
+            currentPuzzle = newPuzzle;
+            puzzleClue.innerText = currentPuzzle.klu;
+            answerInput.value = ''; // Reset input
+            puzzleTitle.innerText = "Teka Teki Kata Hari Ini:";
         }
 
-        // Jalankan fungsi acak saat halaman pertama kali dibuka
-        window.onload = randomizeQuestion;
+        // Fungsi Jumpscare (Menghidupkan Audio Keras & Menampilkan Gambar)
+        function triggerJumpscare() {
+            jumpscareOverlay.classList.add('show');
+            scaryAudio.volume = 1.0; // Volume maksimum
+            scaryAudio.play();
 
-        function checkAnswer() {
-            const answer = document.getElementById('userAnswer').value.trim().toLowerCase();
-
-            if (answer === "") {
-                alert("Masukkan jawabanmu dulu player! Jangan biarkan kosong 👾");
-                return;
-            }
-
-            // Mengecek apakah jawaban user ada di list jawaban benar
-            const isCorrect = currentActivePuzzle.a.includes(answer);
-
-            if (isCorrect) {
-                alert("⚠️ SYSTEM ERROR: Kok kamu tahu jawabannya?! Kamu terlalu jenius untuk game ini! 🎉");
-                randomizeQuestion(); // Ganti ke teka-teki acak lainnya
-                document.getElementById('userAnswer').value = "";
-            } else {
-                triggerDogeJumpscare();
-            }
-        }
-
-        function triggerDogeJumpscare() {
-            const scareZone = document.getElementById('jumpscareZone');
-            const sound = document.getElementById('scareSound');
-
-            // 1. Munculkan visual Doge bergoyang kencang
-            scareZone.style.display = "flex";
-
-            // 2. Mainkan suara kejutan instan
-            sound.volume = 1.0;
-            sound.currentTime = 0; 
-            sound.play();
-
-            // 3. Durasi Jumpscare 4 detik, setelah itu kembalikan ke permainan
+            // Matikan jumpscare setelah 3 detik
             setTimeout(() => {
-                scareZone.style.display = "none";
-                alert("GAME OVER! Lemah sekali logikamu, kamu kena prank Doge imut! 🐕💨");
-                
-                // Setel ulang game dengan pertanyaan baru agar korban penasaran mencoba lagi
-                randomizeQuestion();
-                document.getElementById('userAnswer').value = ""; 
-            }, 4000);
+                jumpscareOverlay.classList.remove('show');
+                scaryAudio.pause();
+                scaryAudio.currentTime = 0; // Reset audio
+            }, 3000);
         }
+
+        // Cek Jawaban
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            if (userAnswer === currentPuzzle.jawaban) {
+                puzzleTitle.innerText = "✅ JAWABAN BENAR!";
+            } else {
+                triggerJumpscare();
+            }
+        }
+
+        // Event Listeners
+        submitBtn.addEventListener('click', checkAnswer);
+        
+        // Memungkinkan menekan enter untuk submit
+        answerInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        nextPuzzleBtn.addEventListener('click', loadRandomPuzzle);
+
+        // Muat pertama kali
+        loadRandomPuzzle();
     </script>
 </body>
 </html>
