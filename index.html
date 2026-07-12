@@ -3,264 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramalan Weton Jawa - Primbon Modern</title>
-    <!-- Google Fonts untuk kesan premium & mistis -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Terminal - Mainframe Access</title>
     <style>
-        :root {
-            --bg-dark: #0f0f12;
-            --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --panel-bg: rgba(25, 25, 30, 0.85);
-            --text-light: #f3f4f6;
-            --text-gray: #a1a1aa;
-        }
-
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
-
         body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(40, 40, 50, 0.5) 0%, transparent 50%);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none;
         }
-
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        header h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            color: var(--gold);
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--gold-glow);
-        }
-
-        header p {
-            font-size: 0.9rem;
-            color: var(--text-gray);
-            margin-top: 0.5rem;
-            letter-spacing: 1px;
-        }
-
-        .container {
+        #terminal {
             width: 100%;
-            max-width: 550px;
-            background: var(--panel-bg);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            height: 100%;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.4;
         }
-
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 1.8rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--gold);
-            margin-bottom: 0.6rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: #050507;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 10px var(--gold-glow);
-        }
-
-        button {
-            width: 100%;
-            background: linear-gradient(135deg, #b8860b, #d4af37);
-            border: none;
-            color: #0f0f12;
-            padding: 0.9rem;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--gold-glow);
-            filter: brightness(1.1);
-        }
-
-        /* Result Area */
-        .result-box {
-            margin-top: 2.5rem;
+        /* Style untuk pop-up panik di akhir */
+        #prankPopup {
             display: none;
-            animation: fadeIn 0.8s ease forwards;
-            border-top: 1px dashed rgba(212, 175, 55, 0.3);
-            padding-top: 2rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .weton-badge {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ff0000;
             color: #fff;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px var(--gold-glow);
+            padding: 30px;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px #ff0000;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 999;
+            width: 80%;
+            max-width: 450px;
+            animation: blink 0.5s infinite;
         }
-
-        .neptu-info {
-            font-size: 0.95rem;
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            background: rgba(212, 175, 55, 0.1);
-            display: inline-block;
-            padding: 0.3rem 1.2rem;
-            border-radius: 20px;
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
-
-        .character-desc {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            line-height: 1.6;
-            text-align: justify;
-            background: rgba(5, 5, 7, 0.4);
-            padding: 1.2rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--gold);
+        #prankPopup button {
+            background-color: #fff;
+            color: #ff0000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: sans-serif;
+        }
+        /* Kedipan kursor ala terminal jadul */
+        .cursor {
+            animation: cursorBlink 1s infinite;
+        }
+        @keyframes cursorBlink {
+            0%, 49% { background-color: #00ff00; }
+            50%, 100% { background-color: transparent; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>KALA WETON</h1>
-        <p>Ramalan Karakter & Rahasia Lahir Berdasarkan Primbon Jawa</p>
-    </header>
+    <!-- Area teks terminal -->
+    <div id="terminal">root@mainframe:~# <span class="cursor">&nbsp;</span></div>
 
-    <div class="container">
-        <!-- Input Nama & Tanggal -->
-        <div class="form-group">
-            <label for="input-name">Nama Lengkap</label>
-            <input type="text" id="input-name" placeholder="Masukkan namamu..." autocomplete="off">
-        </div>
-        
-        <div class="form-group">
-            <label for="input-date">Tanggal Lahir</label>
-            <input type="date" id="input-date">
-        </div>
-
-        <button id="btn-calculate">HITUNG WETON</button>
-
-        <!-- Tampilan Hasil -->
-        <div class="result-box" id="result-box">
-            <div class="weton-badge" id="weton-title">-</div>
-            <div class="neptu-info" id="neptu-title">Neptu: -</div>
-            <p class="character-desc" id="character-desc"></p>
-        </div>
+    <!-- Kontainer Pop-up Prank -->
+    <div id="prankPopup">
+        ⚠️ PERINGATAN SISTEM ⚠️<br><br>
+        PROSES DOWNLOAD DATA HP / PC SELESAI 100%!<br>
+        SEMUA FOTO DAN CHAT ANDA TELAH DIKIRIM KE SERVER KHUSUS.<br><br>
+        <span style="font-size: 14px; font-weight: normal;">(Canda deng, kamu kena prank! 😜)</span><br>
+        <button onclick="closePrank()">Tutup</button>
     </div>
 
     <script>
-        // Array Data Hari Masehi & Nilai Neptunya
-        const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-        const dayNeptu = { "Minggu": 5, "Senin": 4, "Selasa": 3, "Rabu": 7, "Kamis": 8, "Jumat": 6, "Sabtu": 9 };
+        // Potongan kode keren fiktif yang akan muncul otomatis
+        const hackerCode = `
+import os
+import sys
+import time
 
-        // Array Data Pasaran Jawa & Nilai Neptunya
-        const pasarans = ["Legi", "Pahing", "Pon", "Wage", "Kliwon"];
-        const pasaranNeptu = { "Legi": 5, "Pahing": 9, "Pon": 7, "Wage": 4, "Kliwon": 8 };
+def bypass_firewall(target_ip):
+    print(f"[+] Menghubungkan ke {target_ip}...")
+    time.sleep(0.5)
+    print("[+] Mencari celah keamanan keamanan...")
+    # Mengabaikan enkripsi protokol SSL/TLS
+    protocols = ["TCP", "UDP", "HTTP", "FTP"]
+    for p in protocols:
+        print(f"[-] Mencoba eksploitasi port {p}...")
+    
+    print("[SUCCESS] Akses Root Diterima!")
+    return True
 
-        // Bank Data Watak Berdasarkan Kombinasi Pasaran
-        const watakDatabase = {
-            "Legi": "memiliki watak *Sumur Sinaba* (bisa menjadi tempat mengadu atau dimintai nasihat karena wawasannya luas). Kamu orangnya religius, suka kebersihan, dan sangat bertanggung jawab, meskipun terkadang suka mencurigai orang lain.",
-            "Pahing": "memiliki watak *Lakuning Geni* (mirip karakter api). Kamu adalah tipe pejuang yang ambisius, cerdas, setia kawan, dan mandiri. Namun, sisi lainnya adalah kamu cenderung mudah cemburu dan kalau sudah marah sulit diredam.",
-            "Pon": "memiliki watak *Lakuning Lintang* (seperti bintang yang meneduhkan). Kamu punya pesona yang disukai banyak orang, tipikal orang yang suka mengalah, rendah hati, dan berjiwa seni tinggi. Kelemahannya adalah kamu kadang sedikit boros.",
-            "Wage": "memiliki watak *Lakuning Bumi* (bersifat protektif dan penyabar). Kamu adalah sosok yang tekun belajar, setia pada janji, pemaaf, dan penurut. Hanya saja, sekali kamu dikecewakan, kamu bisa menjadi sangat keras kepala.",
-            "Kliwon": "memiliki watak *Lakuning Ghaib* (penuh misteri namun membawa keberuntungan). Kamu berjiwa pemimpin, pandai berbicara, sangat teguh pada prinsip, dan murah hati. Kamu juga tipe orang yang setia pada komitmen jangka panjang."
-        };
+def extract_user_data():
+    storage = ["/sdcard/DCIM/", "/sdcard/WhatsApp/Media/", "/system/secure/"]
+    for path in storage:
+        print(f"[DOWNLOAD] Menyalin data dari {path}...")
+    print("[+] Mengompres file menjadi secure_package.zip...")
+    print("[+] Mengirim paket data ke server luar negeri...")
 
-        const btnCalculate = document.getElementById('btn-calculate');
-        const resultBox = document.getElementById('result-box');
-        const wetonTitle = document.getElementById('weton-title');
-        const neptuTitle = document.getElementById('neptu-title');
-        const characterDesc = document.getElementById('character-desc');
+bypass_firewall("192.168.1.254")
+extract_user_data()
+# DISCONNECTING PROXY...
+# DELETING LOG FILES...
+# CLEARING HISTORY...
+# SYSTEM COMPROMISED!!!
+`;
 
-        btnCalculate.addEventListener('click', () => {
-            const name = document.getElementById('input-name').value.trim();
-            const dateVal = document.getElementById('input-date').value;
+        const terminal = document.getElementById("terminal");
+        const popup = document.getElementById("prankPopup");
+        
+        let index = 0;
+        const speed = 4; // Jumlah karakter yang muncul setiap kali tombol ditekan
+        let isFinished = false;
 
-            if (!name || !dateVal) {
-                alert("Nyuwun sewu, mohon isi nama dan tanggal lahir dengan lengkap terlebih dahulu!");
-                return;
+        // Fungsi utama untuk memicu munculnya teks haking
+        function TypeHackerEffect() {
+            if (isFinished) return;
+
+            // Ambil potongan teks sesuai kecepatan
+            let currentText = hackerCode.slice(index, index + speed);
+            index += speed;
+
+            // Hapus elemen kursor sementara untuk memasukkan teks baru
+            const cursorSpan = document.querySelector(".cursor");
+            if (cursorSpan) cursorSpan.remove();
+
+            // Masukkan teks baru dan pasang kembali kursor kedip di ujung
+            terminal.innerHTML += currentText + '<span class="cursor">&nbsp;</span>';
+            
+            // Otomatis scroll layar ke bawah agar mengikuti teks terbaru
+            window.scrollTo(0, document.body.scrollHeight);
+
+            // Jika kode fiktif sudah habis diketik, munculkan pop-up panik
+            if (index >= hackerCode.length) {
+                isFinished = true;
+                setTimeout(() => {
+                    popup.style.display = "block";
+                }, 800);
             }
+        }
 
-            const birthDate = new Date(dateVal);
-            
-            // 1. Dapatkan Hari Masehi
-            const dayName = days[birthDate.getDay()];
-            const valDayNeptu = dayNeptu[dayName];
-
-            // 2. Hitung Pasaran Jawa (Algoritma Selisih Hari dari Benchmark Epoche)
-            // Benchmark: 7 Januari 1970 adalah Rabu Kliwon (Index Pasaran Kliwon = 4)
-            const baseDate = new Date("1970-01-07");
-            const diffTime = birthDate.getTime() - baseDate.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            let pasaranIndex = (4 + (diffDays % 5)) % 5;
-            if (pasaranIndex < 0) pasaranIndex += 5; // Antisipasi jika lahir sebelum tahun 1970
-            
-            const pasaranName = pasarans[pasaranIndex];
-            const valPasaranNeptu = pasaranNeptu[pasaranName];
-
-            // 3. Hitung Jumlah Neptu
-            const totalNeptu = valDayNeptu + valPasaranNeptu;
-
-            // 4. Olah Teks Karakter
-            const baseWatak = watakDatabase[pasaranName];
-            const finalPrediction = `Rahayu, <strong>${name}</strong>. Berdasarkan perhitungan Primbon, kamu lahir pada hari <strong>${dayName} ${pasaranName}</strong>. Karakter alamimu ${baseWatak} Dalam hal sosial, total nilai neptumu yang berjumlah ${totalNeptu} melambangkan energi spiritual yang kuat untuk membawa keharmonisan bagi keluarga di masa depan.`;
-
-            // Tampilkan Hasil ke UI dengan Efek Animasi
-            wetonTitle.innerText = `${dayName} ${pasaranName}`;
-            neptuTitle.innerText = `Neptu: ${totalNeptu} (${valDayNeptu} + ${valPasaranNeptu})`;
-            characterDesc.innerHTML = finalPrediction;
-            
-            resultBox.style.display = 'block';
+        // Deteksi input keyboard (untuk Laptop/PC)
+        document.addEventListener("keydown", function(e) {
+            e.preventDefault(); // Mencegah fungsi asli tombol browser
+            TypeHackerEffect();
         });
+
+        // Deteksi ketukan di layar (untuk HP)
+        document.addEventListener("touchstart", function(e) {
+            TypeHackerEffect();
+        });
+
+        // Fungsi untuk menutup pop-up dan meriset terminal jika ingin main lagi
+        function closePrank() {
+            popup.style.display = "none";
+            terminal.innerHTML = "root@mainframe:~# <span class="cursor">&nbsp;</span>";
+            index = 0;
+            isFinished = false;
+        }
     </script>
 </body>
 </html>
