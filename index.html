@@ -3,96 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Tantangan Otak Super Seru! ⚡</title>
+    <title>🎮 ULTRA BRAIN ARCADE v1.0 🎮</title>
     <style>
-        /* --- CORE STYLE (TEMA CERIA & MENYENANGKAN) --- */
+        /* --- CORE GAME RETRO STYLE --- */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Courier New', Courier, monospace;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            color: #fff;
         }
 
-        /* --- UTAMA CONTAINER --- */
-        .game-box {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 25px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        /* --- ARCADE MACHINE HUD --- */
+        .game-machine {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             width: 90%;
-            max-width: 450px;
+            max-width: 480px;
             text-align: center;
-            border: 5px solid #ff758c;
-            transform: scale(1);
-            transition: all 0.3s ease;
-        }
-        h1 {
-            color: #ff4b6e;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        .desc {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            line-height: 1.4;
+            border: 6px solid #e94560;
+            position: relative;
         }
 
-        /* --- AREA TEKA-TEKI --- */
-        .puzzle-card {
-            background: #fff0f2;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-            border: 2px dashed #ff758c;
+        /* Detail Lampu Lampu Game */
+        .game-machine::before {
+            content: "• ONLINE • SCORE: 9999 • STAGE 1";
+            display: block;
+            font-size: 11px;
+            color: #00ff66;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
         }
+
+        /* HP Bar Palsu Biar Keren */
+        .hp-bar-container {
+            width: 100%;
+            background: #0f3460;
+            height: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #fff;
+            overflow: hidden;
+        }
+        .hp-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ff66, #99ff33);
+        }
+
+        h1 {
+            color: #e94560;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px #0f3460;
+        }
+
+        /* AREA TEKA-TEKI */
+        .puzzle-screen {
+            background: #16213e;
+            padding: 25px 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 25px;
+            border-left: 5px solid #00fff0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
         input {
             width: 100%;
             padding: 15px;
-            border: 2px solid #ffd0d6;
-            border-radius: 12px;
+            border: 3px solid #0f3460;
+            border-radius: 10px;
             font-size: 1.1rem;
             text-align: center;
             outline: none;
             margin-bottom: 15px;
-            transition: 0.3s;
+            background: #1a1a2e;
+            color: #00fff0;
+            font-family: inherit;
         }
         input:focus {
-            border-color: #ff4b6e;
-            box-shadow: 0 0 10px rgba(255, 75, 110, 0.2);
+            border-color: #e94560;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
         }
 
-        /* --- TOMBOL --- */
         button {
-            background: linear-gradient(45deg, #ff4b6e, #ff758c);
+            background: #e94560;
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 75, 110, 0.3);
             width: 100%;
-            transition: 0.2s;
+            box-shadow: 0 5px 0 #950740;
+            font-family: inherit;
+            transition: 0.1s;
         }
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(255, 75, 110, 0.5);
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #950740;
+        }
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0 0px 0 #950740;
         }
 
-        /* --- ZONA JUMPSCARE (DISEMBUNYIKAN AWALNYA) --- */
+        /* --- ZONA JUMPSCARE DOGE IMUT --- */
         #jumpscareZone {
             display: none;
             position: fixed;
@@ -100,108 +134,151 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #fff;
+            background-color: #ffd200; /* Kuning khas warna Doge */
             z-index: 9999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
-        #jumpscareImage {
-            width: 100%;
-            height: 100%;
+        #dogeImage {
+            width: 85%;
+            height: 85%;
             object-fit: contain;
-            animation: shake 0.1s infinite;
+            animation: ultraShake 0.05s infinite alternate;
         }
-        @keyframes shake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(2px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        
+        /* Efek getar intensitas tinggi */
+        @keyframes ultraShake {
+            0% { transform: translate(5px, 5px) scale(1.05) rotate(1deg); }
+            100% { transform: translate(-5px, -5px) scale(0.95) rotate(-1deg); }
         }
-        .jumpscare-text {
+
+        .doge-text {
             position: absolute;
-            bottom: 10%;
-            font-size: 3rem;
+            font-size: 4.5rem;
             font-weight: 900;
-            color: #ff4b6e;
-            text-shadow: 3px 3px 0 #fff;
+            color: #fff;
+            text-shadow: 5px 5px 0px #000, -5px -5px 0px #000, 5px -5px 0px #000, -5px 5px 0px #000;
             font-family: 'Impact', sans-serif;
+            letter-spacing: 2px;
+            animation: textPulse 0.2s infinite alternate;
+        }
+        @keyframes textPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Kontainer Game Utama -->
-    <div class="game-box" id="gameBox">
-        <h1>🧠 Mini Game Logic 🎮</h1>
-        <p class="desc">Buktikan kalau kamu jenius! Jawab teka-teki logika sederhana di bawah ini dengan benar untuk memenangkan hadiah rahasia.</p>
-
-        <!-- Kartu Pertanyaan -->
-        <div class="puzzle-card">
-            "Jika dibutuhkan waktu 5 menit untuk merebus 1 telur, berapa lama waktu yang diperlukan untuk merebus 5 telur secara bersamaan?"
+    <!-- Kontainer Mesin Game Arcade -->
+    <div class="game-machine" id="gameBox">
+        <h1>⚡ INTELLECT CONSOLE ⚡</h1>
+        
+        <div class="hp-bar-container">
+            <div class="hp-bar"></div>
         </div>
 
-        <!-- Input Jawaban Target -->
-        <input type="number" id="userAnswer" placeholder="Tulis jawaban angka saja..." autocomplete="off">
+        <!-- Layar Teka-Teki -->
+        <div class="puzzle-screen" id="questionBox">
+            Memuat teka-teki logika...
+        </div>
+
+        <!-- Kolom Jawaban -->
+        <input type="text" id="userAnswer" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
         
-        <button onclick="checkAnswer()">Kirim Jawaban 🚀</button>
+        <button onclick="checkAnswer()">SUBMIT ANSWER 🕹️</button>
     </div>
 
-    <!-- Kontainer Jumpscare Kucing -->
+    <!-- Kontainer Jumpscare Doge -->
     <div id="jumpscareZone">
-        <img id="jumpscareImage" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1000&auto=format&fit=crop" alt="DUARR!">
-        <div class="jumpscare-text">DUAARRR!!! 🐱💥</div>
+        <!-- Foto Meme Doge Wajah Imut Original -->
+        <img id="dogeImage" src="https://images.vrt.be/width1280/2021/06/10/8348ee73-ca04-11eb-a13a-02b72993b53b.jpg" alt="Doge">
+        <div class="doge-text">DUARRR!!! 🐕✨</div>
     </div>
 
-    <!-- AUDIO JUMPSCARE KARTUN/LUCU TERBARU -->
+    <!-- AUDIO UNTUK MERUSAK KEHENINGAN -->
+    <!-- Sound effect klakson konyol berfrekuensi tinggi + ketukan kencang -->
     <audio id="scareSound" src="https://assets.mixkit.co/active_storage/sfx/2211/2211-84.wav" preload="auto"></audio>
 
     <script>
+        // Kumpulan Database Teka-Teki Random beserta Kunci Jawabannya
+        const puzzleDatabase = [
+            {
+                q: "Pertanyaan #1: Gajah apa yang belalainya pendek?",
+                a: ["gajah pesek", "gajah pndk", "gajah bersin"] 
+            },
+            {
+                q: "Pertanyaan #2: Kalau singa jadi ayam, lalu sapi jadi ayam, maka ayam jadi apa?",
+                a: ["banyak", "jadi banyak", "bnyk"]
+            },
+            {
+                q: "Pertanyaan #3: Ada orang berjalan di gurun pasir. Setiap dia menoleh ke belakang, kenapa dia tidak melihat jejak kakinya?",
+                a: ["jalan mundur", "dia mundur", "berjalan mundur"]
+            },
+            {
+                q: "Pertanyaan #4: Apa bedanya soto sama siti?",
+                a: ["soto dipukul siti menangis", "soto dipukul", "kalo soto dipukul siti menangis"]
+            },
+            {
+                q: "Pertanyaan #5: Lemari apa yang bisa dimasukkan ke dalam dompet?",
+                a: ["lembaran uang", "lemari uang", "lembaran duit"]
+            }
+        ];
+
+        let currentActivePuzzle = null;
+
+        // Fungsi memilih teka-teki secara acak
+        function randomizeQuestion() {
+            const randomIndex = Math.floor(Math.random() * puzzleDatabase.length);
+            currentActivePuzzle = puzzleDatabase[randomIndex];
+            document.getElementById('questionBox').innerText = currentActivePuzzle.q;
+        }
+
+        // Jalankan fungsi acak saat halaman pertama kali dibuka
+        window.onload = randomizeQuestion;
+
         function checkAnswer() {
-            const answer = document.getElementById('userAnswer').value.trim();
+            const answer = document.getElementById('userAnswer').value.trim().toLowerCase();
 
             if (answer === "") {
-                alert("Isi dulu jawabannya, jangan dikosongin ya! 😋");
+                alert("Masukkan jawabanmu dulu player! Jangan biarkan kosong 👾");
                 return;
             }
 
-            if (parseInt(answer) === 5) {
-                alert("Wah gila, kamu pinter banget! Jawaban kamu BENAR! 🎉");
+            // Mengecek apakah jawaban user ada di list jawaban benar
+            const isCorrect = currentActivePuzzle.a.includes(answer);
+
+            if (isCorrect) {
+                alert("⚠️ SYSTEM ERROR: Kok kamu tahu jawabannya?! Kamu terlalu jenius untuk game ini! 🎉");
+                randomizeQuestion(); // Ganti ke teka-teki acak lainnya
+                document.getElementById('userAnswer').value = "";
             } else {
-                triggerJumpscare();
+                triggerDogeJumpscare();
             }
         }
 
-        function triggerJumpscare() {
+        function triggerDogeJumpscare() {
             const scareZone = document.getElementById('jumpscareZone');
             const sound = document.getElementById('scareSound');
 
-            // Munculkan area gambar kucing
+            // 1. Munculkan visual Doge bergoyang kencang
             scareZone.style.display = "flex";
 
-            // Mainkan suara teriakan lucu dengan volume penuh
+            // 2. Mainkan suara kejutan instan
             sound.volume = 1.0;
-            
-            // Trik paksa audio mengulang dari awal (biar instan responsnya)
             sound.currentTime = 0; 
-            
-            sound.play().catch(function(error) {
-                console.log("Audio sempat terblokir kebijakan browser, silakan klik layar dulu.");
-            });
+            sound.play();
 
-            // Sembunyikan kembali setelah 3.5 detik
+            // 3. Durasi Jumpscare 4 detik, setelah itu kembalikan ke permainan
             setTimeout(() => {
                 scareZone.style.display = "none";
-                alert("Ciyee kaget ya! Makanya fokus dong, kan telurnya direbus barengan! 😜🐱");
+                alert("GAME OVER! Lemah sekali logikamu, kamu kena prank Doge imut! 🐕💨");
+                
+                // Setel ulang game dengan pertanyaan baru agar korban penasaran mencoba lagi
+                randomizeQuestion();
                 document.getElementById('userAnswer').value = ""; 
-            }, 3500);
+            }, 4000);
         }
     </script>
 </body>
