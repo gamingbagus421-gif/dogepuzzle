@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💘 Love Meter - Ukur Kecocokan Cintamu 💘</title>
+    <title>⚡ Tantangan Otak Super Seru! ⚡</title>
     <style>
-        /* --- RESET & BASE STYLE --- */
+        /* --- CORE STYLE (TEMA CERIA & MENYENANGKAN) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -13,331 +13,196 @@
         }
         body {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
-            position: relative;
+            overflow: hidden;
         }
 
-        /* --- BACKGROUND ANIMATION (RAIN OF HEARTS) --- */
-        .heart-particle {
-            position: absolute;
-            color: rgba(255, 75, 110, 0.6);
-            pointer-events: none;
-            animation: floatUp linear infinite;
-            z-index: 1;
-        }
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(0deg) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        /* --- MAIN CONTAINER --- */
-        .container {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
+        /* --- UTAMA CONTAINER --- */
+        .game-box {
+            background: white;
             padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2);
-            border: 4px solid #fff;
+            max-width: 450px;
             text-align: center;
-            z-index: 10;
-            position: relative;
+            border: 5px solid #ff758c;
             transform: scale(1);
             transition: all 0.3s ease;
         }
-
-        /* --- HEADER & TITLES --- */
         h1 {
-            color: #d63384;
-            font-size: 2.2rem;
+            color: #ff4b6e;
+            font-size: 1.8rem;
             margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        .subtitle {
-            color: #6c757d;
+        .desc {
+            color: #666;
             font-size: 0.95rem;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            line-height: 1.4;
         }
 
-        /* --- INPUT FORM STYLE --- */
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-            position: relative;
-        }
-        label {
-            display: block;
-            color: #ff4b6e;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .input-wrapper {
-            position: relative;
-        }
-        .input-wrapper span {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+        /* --- AREA TEKA-TEKI --- */
+        .puzzle-card {
+            background: #fff0f2;
+            padding: 20px;
+            border-radius: 15px;
             font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            border: 2px dashed #ff758c;
         }
         input {
             width: 100%;
-            padding: 15px 15px 15px 45px;
+            padding: 15px;
             border: 2px solid #ffd0d6;
-            border-radius: 15px;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            text-align: center;
             outline: none;
-            transition: all 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            transition: 0.3s;
         }
         input:focus {
             border-color: #ff4b6e;
             box-shadow: 0 0 10px rgba(255, 75, 110, 0.2);
         }
 
-        /* --- HEART ICON MIDWAY --- */
-        .heart-divider {
-            font-size: 2rem;
-            color: #ff4b6e;
-            margin: 15px 0;
-            animation: pulse 1.5s infinite;
-            display: inline-block;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* --- BUTTONS --- */
-        .btn-hitung {
+        /* --- TOMBOL --- */
+        button {
             background: linear-gradient(45deg, #ff4b6e, #ff758c);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 30px;
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 75, 110, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 75, 110, 0.3);
             width: 100%;
-            margin-top: 10px;
+            transition: 0.2s;
         }
-        .btn-hitung:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 75, 110, 0.6);
-        }
-        .btn-hitung:active {
-            transform: translateY(1px);
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 75, 110, 0.5);
         }
 
-        /* --- LOADING ANIMATION --- */
-        .loading-zone {
+        /* --- ZONA JUMPSCARE (DISEMBUNYIKAN AWALNYA) --- */
+        #jumpscareZone {
             display: none;
-            margin: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #fff; /* Latar putih biar kontras gambar kucingnya keliatan jelas */
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        .heart-loader {
-            font-size: 2.5rem;
-            animation: spin 1s linear infinite;
-            display: inline-block;
+        #jumpscareImage {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Gambar kucing penuh satu layar */
+            animation: shake 0.1s infinite; /* Efek getar biar makin kaget */
         }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-
-        /* --- RESULT SCREEN --- */
-        .result-zone {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 20px;
-            background: #fff0f2;
-            border: 2px dashed #ff758c;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .percent-box {
-            font-size: 4rem;
+        .jumpscare-text {
+            position: absolute;
+            bottom: 10%;
+            font-size: 3rem;
             font-weight: 900;
             color: #ff4b6e;
-            margin: 10px 0;
+            text-shadow: 3px 3px 0 #fff;
             font-family: 'Impact', sans-serif;
-            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #ffd0d6;
-        }
-        .verdict {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .description {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-    <!-- Kontainer Utama -->
-    <div class="container">
-        <h1>💖 LOVE METER 💖</h1>
-        <p class="subtitle">Cari tahu seberapa besar energi kecocokan takdir kalian berdua!</p>
+    <!-- Kontainer Game Utama -->
+    <div class="game-box" id="gameBox">
+        <h1>🧠 Mini Game Logic 🎮</h1>
+        <p class="desc">Buktikan kalau kamu jenius! Jawab teka-teki logika sederhana di bawah ini dengan benar untuk memenangkan hadiah rahasia.</p>
 
-        <!-- Input Nama 1 -->
-        <div class="input-group">
-            <label>Nama Kamu</label>
-            <div class="input-wrapper">
-                <span>👦</span>
-                <input type="text" id="name1" placeholder="Masukkan nama kamu..." autocomplete="off">
-            </div>
+        <!-- Kartu Pertanyaan -->
+        <div class="puzzle-card">
+            "Jika dibutuhkan waktu 5 menit untuk merebus 1 telur, berapa lama waktu yang diperlukan untuk merebus 5 telur secara bersamaan?"
         </div>
 
-        <!-- Pembatas Icon Hati berdenyut -->
-        <div class="heart-divider">❤️</div>
-
-        <!-- Input Nama 2 -->
-        <div class="input-group">
-            <label>Nama Pasangan / Crush</label>
-            <div class="input-wrapper">
-                <span>👧</span>
-                <input type="text" id="name2" placeholder="Masukkan nama dia..." autocomplete="off">
-            </div>
-        </div>
-
-        <!-- Tombol Aksi -->
-        <button class="btn-hitung" onclick="calculateLove()">Cek Persentase Cinta ✨</button>
-
-        <!-- Animasi Loading -->
-        <div class="loading-zone" id="loadingZone">
-            <div class="heart-loader">🔮</div>
-            <p style="color: #ff4b6e; font-weight: bold; margin-top: 10px;">Membaca Garis Takdir...</p>
-        </div>
-
-        <!-- Zona Hasil Akhir -->
-        <div class="result-zone" id="resultZone">
-            <div id="coupleNames" style="font-weight: bold; color: #d63384; font-size: 1.1rem;"></div>
-            <div class="percent-box" id="percentBox">0%</div>
-            <div class="verdict" id="verdictBox">Analisis</div>
-            <p class="description" id="descBox">Deskripsi</p>
-        </div>
+        <!-- Input Jawaban Target -->
+        <input type="number" id="userAnswer" placeholder="Tulis jawaban angka saja..." autocomplete="off">
+        
+        <button onclick="checkAnswer()">Kirim Jawaban 🚀</button>
     </div>
 
-    <!-- JAVASCRIPT LOGIC & ANIMATION -->
+    <!-- Kontainer Jumpscare Kucing -->
+    <div id="jumpscareZone">
+        <!-- Gambar Kucing Kaget / Duarr (Bisa diganti link gambar buatanmu sendiri) -->
+        <img id="jumpscareImage" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1000&auto=format&fit=crop" alt="DUARR!">
+        <div class="jumpscare-text">DUAARRR!!! 🐱💥</div>
+    </div>
+
+    <!-- AUDIO UNTUK SENSASI KAGET -->
+    <!-- Sound effect "Duarr" ledakan kartun / lucu (bisa diganti) -->
+    <audio id="scareSound" src="https://www.soundjay.com/mechanical/sounds/explosion-02.mp3" preload="auto"></audio>
+
     <script>
-        // 1. MEMBUAT HUJAN EMOJI HATI DI BACKGROUND (RAMAI & MERIAH)
-        const heartIcons = ['❤️', '💖', '💘', '💝', '🌸', '💕'];
-        function createHeartParticle() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
-            
-            // Mengatur posisi acak horizontal di layar
-            heart.style.left = Math.random() * 100 + "vw";
-            // Mengatur ukuran acak font
-            heart.style.fontSize = Math.random() * 20 + 15 + "px";
-            // Mengatur durasi jatuh acak
-            heart.style.animationDuration = Math.random() * 3 + 3 + "s";
-            
-            document.body.appendChild(heart);
+        function checkAnswer() {
+            const answer = document.getElementById('userAnswer').value.trim();
 
-            // Hapus element setelah animasi selesai biar web tidak berat
-            setTimeout(() => {
-                heart.remove();
-            }, 6000);
-        }
-        // Jalankan hujan hati setiap 300 milidetik
-        setInterval(createHeartParticle, 300);
-
-
-        // 2. LOGIKA KALKULATOR CINTA (KONSISTEN & DETAIL)
-        function calculateLove() {
-            const name1 = document.getElementById('name1').value.trim();
-            const name2 = document.getElementById('name2').value.trim();
-
-            // Validasi Input Kosong
-            if (name1 === "" || name2 === "") {
-                alert("Eits! Isi dulu nama kamu dan pasanganmu ya! 🙈");
+            if (answer === "") {
+                alert("Isi dulu jawabannya, jangan dikosongin ya! 😋");
                 return;
             }
 
-            // Sembunyikan hasil lama dan tampilkan loading animasi
-            document.getElementById('resultZone').style.display = "none";
-            const loading = document.getElementById('loadingZone');
-            loading.style.display = "block";
-
-            // Mengunci kombinasi string agar jika nama dicoba berulang, hasilnya tetap sama (Konsisten)
-            const combinedString = (name1 + name2).toLowerCase().replace(/\s+/g, '');
-            let sum = 0;
-            for (let i = 0; i < combinedString.length; i++) {
-                sum += combinedString.charCodeAt(i);
-            }
-            // Rumus menghasilkan angka 45 sampai 100 biar hasilnya tidak terlalu zonk/sedikit
-            const finalPercentage = (sum % 56) + 45; 
-
-            // Menentukan teks kesimpulan dan detail deskripsi romantis berdasarkan range persen
-            let verdict = "";
-            let description = "";
-
-            if (finalPercentage >= 90) {
-                verdict = "👑 PASANGAN SEJATI (SOULMATE)!";
-                description = "Luar biasa! Kalian berdua memiliki koneksi batin yang sangat kuat. Hubungan kalian dipenuhi rasa saling mengerti, kepercayaan tinggi, dan takdir seolah memang sengaja menyatukan kalian. Segera halalkan atau jaga dia baik-baik!";
-            } else if (finalPercentage >= 75) {
-                verdict = "❤️ SANGAT COCOK & HARMONIS!";
-                description = "Chemistry kalian berdua sangat tinggi! Kalian punya banyak kesamaan cara pandang dan selalu seru kalau sedang mengobrol. Hambatan kecil dalam hubungan bisa diselesaikan dengan mudah karena kalian saling sayang.";
-            } else if (finalPercentage >= 60) {
-                verdict = "🌸 CINTA BERTUMBUH (GOOD MATCH)";
-                description = "Kalian berdua berada di jalur yang aman. Ada kecocokan yang baik, namun masih butuh sedikit bumbu-bumbu kompromi dan menurunkan ego masing-masing. Komunikasi adalah kunci utama keharmonisan kalian.";
+            // Jawaban yang benar adalah 5 (karena direbus bersamaan)
+            if (parseInt(answer) === 5) {
+                // Jika mereka pintar dan menjawab benar, kasih selamat
+                alert("Wah gila, kamu pinter banget! Jawaban kamu BENAR! 🎉");
             } else {
-                verdict = "⚡ BUTUH PERJUANGAN EKSTRA";
-                description = "Persentase kalian tidak begitu tinggi, artinya kalian berdua sering berbeda pendapat dan punya kepribadian yang bertolak belakang. Tapi tenang, cinta bisa mengalahkan segalanya jika kalian berdua sama-sama mau berjuang dan saling sabar!";
+                // JIKA SALAH -> MICU JUMPSCARE KUCING IMUT
+                triggerJumpscare();
             }
+        }
 
-            // Jalankan jeda simulasi 2 detik seolah-olah sistem sedang menghitung serius
+        function triggerJumpscare() {
+            const scareZone = document.getElementById('jumpscareZone');
+            const sound = document.getElementById('scareSound');
+
+            // 1. Munculkan area gambar kucing secara penuh
+            scareZone.style.display = "flex";
+
+            // 2. Putar suara ledakan keras secara instan
+            sound.volume = 1.0; // Set volume maksimal
+            sound.play().catch(function(error) {
+                console.log("Browser memblokir auto-play suara sebelum ada interaksi.");
+            });
+
+            // 3. Setelah 4 detik, hilangkan jumpscare-nya dan kembalikan ke game biar mereka tertawa
             setTimeout(() => {
-                loading.style.display = "none";
-                
-                // Isi konten hasil
-                document.getElementById('coupleNames').innerText = `${name1} 💖 ${name2}`;
-                document.getElementById('verdictBox').innerText = verdict;
-                document.getElementById('descBox').innerText = description;
-                
-                // Efek animasi angka persen menghitung naik (Counter effect)
-                const percentBox = document.getElementById('percentBox');
-                document.getElementById('resultZone').style.display = "block";
-                
-                let currentPercent = 0;
-                const duration = 15; // Kecepatan angka naik
-                const counter = setInterval(() => {
-                    if (currentPercent >= finalPercentage) {
-                        clearInterval(counter);
-                    } else {
-                        currentPercent++;
-                        percentBox.innerText = currentPercent + "%";
-                    }
-                }, duration);
-
-            }, 2000);
+                scareZone.style.display = "none";
+                alert("Ciyee kaget ya! Makanya fokus dong, kan telurnya direbus barengan! 😜🐱");
+                document.getElementById('userAnswer').value = ""; // Reset input
+            }, 4000);
         }
     </script>
 </body>
